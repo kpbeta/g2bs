@@ -7,12 +7,11 @@ import json
 # import urllib2
 
 FILENAME = sys.argv[1]
-print(sys.argv)
 print(FILENAME)
 
 GM_ARR = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-BSM_ARR = ["Baisakh", "Jestha", "Asadh", "Shrawan", "Bhadra", "Ashoj",\
-        "Kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"]
+BSM_ARR = ["Baisakh", "Jestha", "Ashad", "Shrawan", "Bhadra", "Ashoj",\
+        "kartik", "Mangsir", "Poush", "Magh", "Falgun", "Chaitra"]
 
 def get_bs_month_num(gmon):
     return BSM_ARR.index(gmon)+1
@@ -23,7 +22,6 @@ def get_gmonth_num(smon):
 url = FILENAME
 page = open(url)
 soup = BeautifulSoup(page.read(), "html.parser")
-print(soup[:5])
 
 bs_date = soup.find('h1', {'id': 'yren'}).getText()
 gr_date = soup.find('h2', {'id': 'entarikYr'}).getText()
@@ -31,7 +29,7 @@ gr_date = soup.find('h2', {'id': 'entarikYr'}).getText()
 print(bs_date, gr_date)
 bsyr = int(bs_date.strip().split(" ")[1])
 bsm = bs_date.strip().split(" ")[0] 
-gyr = int(gr_date.strip().split(" ")[1])
+gyr = int(gr_date.strip().split(" ")[1].split("/")[0])
 gm1 = gr_date.strip().split("/")[0]
 gm_num = get_gmonth_num(gm1)
 bsm_num = get_bs_month_num(bsm)
@@ -47,8 +45,9 @@ for d in days:
     gate = d.find('div', {'id': 'nday'}).getText().strip()
     tarik = d.find('div', {'id': 'eday'}).getText().strip()
     fest = d.find('div', {'id': 'fest'}).getText().strip()
-
-    if not gate or not tarik or not dashi:
+    # print(dashi, gate, tarik, fest, dashi)
+    
+    if not gate or not tarik:
         continue
 
     tarikn = int(tarik)
@@ -64,9 +63,9 @@ for d in days:
     bs_value = {'dashi': dashi, 'fest': fest, 'greg': g_key}
     dic[bs_key] = bs_value
 
-print(dic)
+# print(dic)
 
-with open("./dict/dict"+FILENAME+".json", 'w') as f:
+with open("./dict"+FILENAME+".json", 'w') as f:
     f.write(json.dumps(dic))
 
 
