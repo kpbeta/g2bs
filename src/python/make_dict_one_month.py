@@ -26,7 +26,7 @@ soup = BeautifulSoup(page.read(), "html.parser")
 bs_date = soup.find('h1', {'id': 'yren'}).getText()
 gr_date = soup.find('h2', {'id': 'entarikYr'}).getText()
 
-print(bs_date, gr_date)
+# print(bs_date, gr_date)
 bsyr = int(bs_date.strip().split(" ")[1])
 bsm = bs_date.strip().split(" ")[0] 
 gyr = int(gr_date.strip().split(" ")[1].split("/")[0])
@@ -57,7 +57,7 @@ for d in days:
             gyr += 1
 
     g_key = "g{yr}-{mth}-{day}".format(yr=gyr, mth=gm_num, day=tarikn)
-    bs_key = "bs{yr}-{mth}-{day}".format(yr=gyr, mth=gm_num, day=gate)
+    bs_key = "bs{yr}-{mth}-{day}".format(yr=bsyr, mth=bsm_num, day=gate)
 
     dic[g_key] = bs_key
     bs_value = {'dashi': dashi, 'fest': fest, 'greg': g_key}
